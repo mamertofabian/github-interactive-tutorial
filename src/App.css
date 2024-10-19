@@ -89,6 +89,50 @@ footer {
   overflow-x: auto;
 }
 
+/* New styles for the FirstRepository component */
+.first-repository code {
+  background-color: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.first-repository .terminal {
+  background-color: #1e1e1e;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+  font-family: monospace;
+}
+
+.first-repository .terminal-output {
+  height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.first-repository .terminal-input {
+  display: flex;
+  align-items: center;
+}
+
+.first-repository .terminal-input span {
+  margin-right: 5px;
+}
+
+.first-repository .terminal-input input {
+  background-color: transparent;
+  border: none;
+  color: #ffffff;
+  font-family: monospace;
+  flex-grow: 1;
+}
+
+.first-repository .terminal-input input:focus {
+  outline: none;
+}
+
 @media (max-width: 768px) {
   nav ul {
     flex-direction: column;
