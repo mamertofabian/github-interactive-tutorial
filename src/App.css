@@ -1,0 +1,104 @@
+.App {
+  font-family: Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  background-color: #f0f0f0;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+nav ul li {
+  margin-right: 10px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+}
+
+main {
+  min-height: calc(100vh - 200px);
+}
+
+footer {
+  margin-top: 20px;
+  text-align: center;
+  color: #666;
+}
+
+.scenario-simulator {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.conflict-warning {
+  background-color: #ffeeee;
+  border: 1px solid #ffcccc;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+/* New styles for the Setup component */
+.setup button {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.setup button:hover {
+  background-color: #e0e0e0;
+}
+
+.setup form {
+  margin-top: 20px;
+}
+
+.setup form div {
+  margin-bottom: 10px;
+}
+
+.setup label {
+  display: inline-block;
+  width: 100px;
+}
+
+.setup input {
+  padding: 5px;
+  width: 200px;
+}
+
+.setup pre {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+  }
+
+  nav ul li {
+    margin-bottom: 5px;
+  }
+
+  .setup input {
+    width: 100%;
+  }
+}
