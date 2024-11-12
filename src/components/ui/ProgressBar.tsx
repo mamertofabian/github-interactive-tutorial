@@ -31,15 +31,17 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   };
 
   return (
-    <div className={clsx('w-full', className)}>
-      <div className={clsx('w-full bg-gray-600 rounded-full overflow-hidden border border-gray-500', sizes[size])}>
-        <div
-          className={clsx('transition-all duration-300 ease-in-out', colors[color])}
-          style={{ width: `${normalizedProgress}%` }}
-        />
+    <div className={clsx('w-full flex items-center gap-3', className)}>
+      <div className="flex-grow">
+        <div className={clsx('w-full bg-gray-600 rounded-full overflow-hidden border border-gray-500', sizes[size])}>
+          <div
+            className={clsx('transition-all duration-300 ease-in-out', colors[color])}
+            style={{ width: `${normalizedProgress}%` }}
+          />
+        </div>
       </div>
       {showLabel && (
-        <div className="mt-1 text-sm text-gray-400 text-right">
+        <div className="text-sm text-gray-400 whitespace-nowrap">
           {normalizedProgress}%
         </div>
       )}
