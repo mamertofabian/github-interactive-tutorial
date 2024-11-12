@@ -13,9 +13,9 @@ export const NavigationBar: React.FC = () => {
   };
 
   const handleLessonsClick = () => {
-    // Navigate to the lesson selection section
+    // Navigate to the first section, same as home
     if (content.sections.length > 0) {
-      setCurrentSection('lesson-selection');
+      setCurrentSection(content.sections[0].id);
     }
   };
 
