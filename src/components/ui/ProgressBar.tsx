@@ -19,9 +19,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   const normalizedProgress = Math.min(Math.max(progress, 0), 100);
 
   const colors = {
-    blue: 'bg-blue-600',
-    green: 'bg-green-600',
-    red: 'bg-red-600',
+    blue: 'bg-blue-500',
+    green: 'bg-green-500',
+    red: 'bg-red-500',
   };
 
   const sizes = {
@@ -32,7 +32,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
   return (
     <div className={clsx('w-full', className)}>
-      <div className={clsx('w-full bg-gray-700 rounded-full overflow-hidden', sizes[size])}>
+      <div className={clsx('w-full bg-gray-600 rounded-full overflow-hidden border border-gray-500', sizes[size])}>
         <div
           className={clsx('transition-all duration-300 ease-in-out', colors[color])}
           style={{ width: `${normalizedProgress}%` }}

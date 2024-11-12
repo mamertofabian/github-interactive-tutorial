@@ -34,8 +34,8 @@ export const NavigationBar: React.FC = () => {
           </button>
           
           <div className="flex items-center space-x-4">
-            <div className="w-48">
-              <ProgressBar progress={progress} color="blue" size="sm" showLabel />
+            <div className="w-48 flex items-center">
+              <ProgressBar progress={progress} color="blue" size="md" showLabel />
             </div>
             <button 
               onClick={handleLessonsClick}
