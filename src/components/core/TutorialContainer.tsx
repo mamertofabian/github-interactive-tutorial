@@ -14,6 +14,7 @@ export const TutorialContainer: React.FC = () => {
   const handleNextSection = () => {
     const currentIndex = content.sections.findIndex(s => s.id === section.id);
     if (currentIndex < content.sections.length - 1) {
+      updateProgress(section.id);
       setCurrentSection(content.sections[currentIndex + 1].id);
     }
   };

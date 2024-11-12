@@ -1,9 +1,11 @@
 import React from 'react';
 import { HomeIcon, BookOpenIcon } from '@heroicons/react/24/outline';
 import { useTutorialContext } from '../../contexts/TutorialContext';
+import { ProgressBar } from '../ui/ProgressBar';
 
 export const NavigationBar: React.FC = () => {
-  const { setCurrentSection, content } = useTutorialContext();
+  const { setCurrentSection, content, completedSections } = useTutorialContext();
+  const progress = Math.round((completedSections.size / content.sections.length) * 100);
 
   const handleHomeClick = () => {
     // Navigate to the first section
@@ -31,13 +33,18 @@ export const NavigationBar: React.FC = () => {
             <span className="ml-2 text-lg font-semibold text-white">Git Tutorial</span>
           </button>
           
-          <button 
-            onClick={handleLessonsClick}
-            className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors"
-          >
-            <BookOpenIcon className="h-5 w-5" />
-            <span>Lessons</span>
-          </button>
+          <div className="flex items-center space-x-4">
+            <div className="w-48">
+              <ProgressBar progress={progress} color="blue" size="sm" showLabel />
+            </div>
+            <button 
+              onClick={handleLessonsClick}
+              className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors"
+            >
+              <BookOpenIcon className="h-5 w-5" />
+              <span>Lessons</span>
+            </button>
+          </div>
         </div>
       </div>
     </nav>
