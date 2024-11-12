@@ -1,21 +1,15 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import basicContent from '../data/tutorial-content.json';
 import advancedContent from '../data/tutorial-content-advanced.json';
 import finalContent from '../data/tutorial-content-final.json';
 
 // Make visualization type more flexible
 interface BaseVisualization {
   type: string;
+  [key: string]: any; // Allow any additional properties
 }
 
-interface DataVisualization extends BaseVisualization {
-  data: any;
-}
-
-interface StepsVisualization extends BaseVisualization {
-  steps: string[];
-}
-
-type Visualization = DataVisualization | StepsVisualization;
+type Visualization = BaseVisualization;
 
 interface PracticeStep {
   action: string;
@@ -125,6 +119,7 @@ interface Section {
 
 interface TutorialContent {
   sections: Section[];
+  title?: string;
 }
 
 interface TutorialContextType {
@@ -152,9 +147,10 @@ interface TutorialProviderProps {
 export const TutorialProvider: React.FC<TutorialProviderProps> = ({ children }) => {
   const [currentSection, setCurrentSection] = useState<string | null>(null);
   
-  // Combine advanced and final content
+  // Combine all content
   const combinedContent: TutorialContent = {
-    sections: [...advancedContent.sections, ...finalContent.sections]
+    title: basicContent.title,
+    sections: [...basicContent.sections, ...advancedContent.sections, ...finalContent.sections]
   };
   
   const [content] = useState<TutorialContent>(combinedContent);
