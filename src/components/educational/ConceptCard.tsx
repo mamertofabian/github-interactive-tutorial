@@ -1,52 +1,57 @@
 import React from 'react';
-import { LightBulbIcon } from '@heroicons/react/24/outline';
 
 interface ConceptCardProps {
   title: string;
   description: string;
   examples?: string[];
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  keyPoints?: string[];
+  visualization?: {
+    type: string;
+    data: any;
+  };
 }
 
 export const ConceptCard: React.FC<ConceptCardProps> = ({
   title,
   description,
   examples = [],
-  difficulty = 'beginner',
+  keyPoints = []
 }) => {
-  const difficultyColors = {
-    beginner: 'text-green-400',
-    intermediate: 'text-yellow-400',
-    advanced: 'text-red-400',
-  };
-
   return (
-    <div className="bg-gray-800 rounded-lg p-6 hover:bg-gray-750 transition-colors">
-      <div className="flex items-start space-x-4">
-        <div className="bg-blue-500/10 rounded-lg p-2">
-          <LightBulbIcon className="h-6 w-6 text-blue-400" />
-        </div>
-        <div className="flex-1">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-xl font-semibold text-white">{title}</h3>
-            <span className={`text-sm ${difficultyColors[difficulty]}`}>
-              {difficulty}
-            </span>
+    <div className="bg-gray-800 rounded-lg overflow-hidden">
+      <div className="p-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">{title}</h2>
+        <p className="text-gray-300 mb-6">{description}</p>
+
+        {keyPoints.length > 0 && (
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold mb-3 text-white">Key Points</h3>
+            <ul className="space-y-2">
+              {keyPoints.map((point, index) => (
+                <li key={index} className="flex items-start">
+                  <span className="text-blue-400 mr-2">•</span>
+                  <span className="text-gray-300">{point}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <p className="text-gray-300 mb-4">{description}</p>
-          {examples.length > 0 && (
-            <div className="bg-gray-900 rounded-lg p-4">
-              <h4 className="text-sm font-semibold text-gray-400 mb-2">Examples:</h4>
-              <ul className="space-y-2">
-                {examples.map((example, index) => (
-                  <li key={index} className="text-gray-300">
-                    {example}
-                  </li>
-                ))}
-              </ul>
+        )}
+
+        {examples.length > 0 && (
+          <div>
+            <h3 className="text-lg font-semibold mb-3 text-white">Examples</h3>
+            <div className="space-y-3">
+              {examples.map((example, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-700 p-4 rounded-lg text-gray-300 font-mono text-sm"
+                >
+                  {example}
+                </div>
+              ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

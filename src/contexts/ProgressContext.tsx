@@ -1,70 +1,102 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { useUserContext } from './UserContext';
 
 interface Progress {
+  completedLessons: string[];
   totalLessons: number;
-  completedLessons: number;
-  currentModule: string;
-  achievements: string[];
-  lastActivity: Date | null;
+  nextLesson?: {
+    id: string;
+    title: string;
+  };
 }
 
-type ProgressAction =
-  | { type: 'COMPLETE_LESSON'; payload: number }
-  | { type: 'SET_CURRENT_MODULE'; payload: string }
-  | { type: 'ADD_ACHIEVEMENT'; payload: string }
-  | { type: 'UPDATE_LAST_ACTIVITY' }
-  | { type: 'RESET_PROGRESS' };
+interface ProgressContextType {
+  progress: Progress | null;
+  updateProgress: (lessonId: string) => void;
+  resetProgress: () => void;
+}
 
-const initialState: Progress = {
-  totalLessons: 0,
-  completedLessons: 0,
-  currentModule: '',
-  achievements: [],
-  lastActivity: null,
-};
+const ProgressContext = createContext<ProgressContextType | undefined>(undefined);
 
-const progressReducer = (state: Progress, action: ProgressAction): Progress => {
-  switch (action.type) {
-    case 'COMPLETE_LESSON':
-      return {
-        ...state,
-        completedLessons: Math.min(state.completedLessons + 1, state.totalLessons),
-      };
-    case 'SET_CURRENT_MODULE':
-      return { ...state, currentModule: action.payload };
-    case 'ADD_ACHIEVEMENT':
-      return {
-        ...state,
-        achievements: [...state.achievements, action.payload],
-      };
-    case 'UPDATE_LAST_ACTIVITY':
-      return { ...state, lastActivity: new Date() };
-    case 'RESET_PROGRESS':
-      return initialState;
-    default:
-      return state;
+export const useProgressContext = () => {
+  const context = useContext(ProgressContext);
+  if (context === undefined) {
+    throw new Error('useProgressContext must be used within a ProgressProvider');
   }
+  return context;
 };
 
-const ProgressContext = createContext<{
-  state: Progress;
-  dispatch: React.Dispatch<ProgressAction>;
-} | null>(null);
+interface ProgressProviderProps {
+  children: ReactNode;
+  totalLessons: number;
+}
 
-export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(progressReducer, initialState);
+export const ProgressProvider: React.FC<ProgressProviderProps> = ({ children, totalLessons }) => {
+  const { user } = useUserContext();
+  const [progress, setProgress] = useState<Progress | null>(null);
+
+  // Initialize progress from user data
+  useEffect(() => {
+    if (user?.progress) {
+      setProgress({
+        completedLessons: user.progress.completedLessons,
+        totalLessons,
+        nextLesson: user.progress.currentLesson ? {
+          id: user.progress.currentLesson,
+          title: 'Next Lesson' // This would typically come from your lesson data
+        } : undefined
+      });
+    } else {
+      setProgress({
+        completedLessons: [],
+        totalLessons,
+        nextLesson: {
+          id: 'intro-git',
+          title: 'Introduction to Git and GitHub'
+        }
+      });
+    }
+  }, [user, totalLessons]);
+
+  const updateProgress = (lessonId: string) => {
+    setProgress(prev => {
+      if (!prev) return null;
+
+      const completedLessons = [...prev.completedLessons];
+      if (!completedLessons.includes(lessonId)) {
+        completedLessons.push(lessonId);
+      }
+
+      // This is a simplified example - you'd typically determine the next lesson
+      // based on your lesson structure
+      const nextLessonId = 'next-lesson-id';
+      const nextLessonTitle = 'Next Lesson';
+
+      return {
+        ...prev,
+        completedLessons,
+        nextLesson: {
+          id: nextLessonId,
+          title: nextLessonTitle
+        }
+      };
+    });
+  };
+
+  const resetProgress = () => {
+    setProgress({
+      completedLessons: [],
+      totalLessons,
+      nextLesson: {
+        id: 'intro-git',
+        title: 'Introduction to Git and GitHub'
+      }
+    });
+  };
 
   return (
-    <ProgressContext.Provider value={{ state, dispatch }}>
+    <ProgressContext.Provider value={{ progress, updateProgress, resetProgress }}>
       {children}
     </ProgressContext.Provider>
   );
-};
-
-export const useProgress = () => {
-  const context = useContext(ProgressContext);
-  if (!context) {
-    throw new Error('useProgress must be used within a ProgressProvider');
-  }
-  return context;
 };

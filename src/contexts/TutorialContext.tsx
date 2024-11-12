@@ -1,77 +1,107 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-interface TutorialStep {
+interface Lesson {
   id: string;
   title: string;
   description: string;
-  type: 'concept' | 'interactive' | 'challenge';
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  timeEstimate: number;
-  dependencies?: string[];
+  duration: string;
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  sections: Array<{
+    type: 'theory' | 'practice' | 'challenge';
+    content: any;
+  }>;
 }
 
-interface TutorialState {
-  currentStep: number;
-  steps: TutorialStep[];
-  completedSteps: string[];
-  isLoading: boolean;
-  error: string | null;
+interface TutorialContextType {
+  lessons: Lesson[];
+  currentLesson: string | null;
+  setCurrentLesson: (lessonId: string | null) => void;
+  getLessonById: (id: string) => Lesson | undefined;
+  updateProgress: (lessonId: string) => void;
 }
 
-type TutorialAction =
-  | { type: 'SET_CURRENT_STEP'; payload: number }
-  | { type: 'COMPLETE_STEP'; payload: string }
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'RESET_TUTORIAL' };
+const TutorialContext = createContext<TutorialContextType | undefined>(undefined);
 
-const initialState: TutorialState = {
-  currentStep: 0,
-  steps: [],
-  completedSteps: [],
-  isLoading: false,
-  error: null,
-};
-
-const tutorialReducer = (state: TutorialState, action: TutorialAction): TutorialState => {
-  switch (action.type) {
-    case 'SET_CURRENT_STEP':
-      return { ...state, currentStep: action.payload };
-    case 'COMPLETE_STEP':
-      return {
-        ...state,
-        completedSteps: [...state.completedSteps, action.payload],
-      };
-    case 'SET_LOADING':
-      return { ...state, isLoading: action.payload };
-    case 'SET_ERROR':
-      return { ...state, error: action.payload };
-    case 'RESET_TUTORIAL':
-      return initialState;
-    default:
-      return state;
+export const useTutorialContext = () => {
+  const context = useContext(TutorialContext);
+  if (context === undefined) {
+    throw new Error('useTutorialContext must be used within a TutorialProvider');
   }
+  return context;
 };
 
-const TutorialContext = createContext<{
-  state: TutorialState;
-  dispatch: React.Dispatch<TutorialAction>;
-} | null>(null);
+interface TutorialProviderProps {
+  children: ReactNode;
+}
 
-export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(tutorialReducer, initialState);
+export const TutorialProvider: React.FC<TutorialProviderProps> = ({ children }) => {
+  const [currentLesson, setCurrentLesson] = useState<string | null>(null);
+  
+  // Initial lessons data structure
+  const [lessons] = useState<Lesson[]>([
+    {
+      id: 'intro-git',
+      title: 'Introduction to Git and GitHub',
+      description: 'Learn the basics of version control and GitHub\'s platform',
+      duration: '30 mins',
+      difficulty: 'Beginner',
+      sections: [
+        {
+          type: 'theory',
+          content: {
+            title: 'What is Git?',
+            description: 'Git is a distributed version control system...',
+            // Additional content...
+          }
+        },
+        // Additional sections...
+      ]
+    },
+    {
+      id: 'setup-environment',
+      title: 'Setting Up Your Environment',
+      description: 'Configure Git and create your GitHub account',
+      duration: '20 mins',
+      difficulty: 'Beginner',
+      sections: [
+        {
+          type: 'practice',
+          content: {
+            title: 'Installing Git',
+            steps: [
+              'Download Git from git-scm.com',
+              'Run the installer',
+              'Verify installation with git --version'
+            ]
+          }
+        },
+        // Additional sections...
+      ]
+    },
+    // Additional lessons...
+  ]);
+
+  const getLessonById = (id: string) => {
+    return lessons.find(lesson => lesson.id === id);
+  };
+
+  const updateProgress = (lessonId: string) => {
+    // Implementation for updating progress
+    // This would typically interact with some form of storage
+    console.log(`Progress updated for lesson: ${lessonId}`);
+  };
 
   return (
-    <TutorialContext.Provider value={{ state, dispatch }}>
+    <TutorialContext.Provider
+      value={{
+        lessons,
+        currentLesson,
+        setCurrentLesson,
+        getLessonById,
+        updateProgress,
+      }}
+    >
       {children}
     </TutorialContext.Provider>
   );
-};
-
-export const useTutorial = () => {
-  const context = useContext(TutorialContext);
-  if (!context) {
-    throw new Error('useTutorial must be used within a TutorialProvider');
-  }
-  return context;
 };
