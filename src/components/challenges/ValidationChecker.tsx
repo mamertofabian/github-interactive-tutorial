@@ -1,39 +1,51 @@
 import React from 'react';
-import { CheckCircleIcon, XCircleIcon, MinusCircleIcon } from '@heroicons/react/24/solid';
 
-interface Check {
-  id: string;
-  label: string;
-  status: 'success' | 'error' | 'pending';
+interface ValidationConfig {
+  command?: string;
+  expected?: string;
+  pattern?: string;
+  type?: string;
+  element?: string;
 }
 
 interface ValidationCheckerProps {
-  checks: Check[];
+  config: ValidationConfig;
+  input: string;
+  onValidationComplete: (isValid: boolean) => void;
 }
 
-export const ValidationChecker: React.FC<ValidationCheckerProps> = ({ checks }) => {
-  const getStatusIcon = (status: Check['status']) => {
-    switch (status) {
-      case 'success':
-        return <CheckCircleIcon className="h-6 w-6 text-green-500" />;
-      case 'error':
-        return <XCircleIcon className="h-6 w-6 text-red-500" />;
-      default:
-        return <MinusCircleIcon className="h-6 w-6 text-gray-500" />;
-    }
-  };
+export const ValidationChecker: React.FC<ValidationCheckerProps> = ({
+  config,
+  input,
+  onValidationComplete
+}) => {
+  React.useEffect(() => {
+    const validateInput = async () => {
+      try {
+        let isValid = false;
 
-  return (
-    <div className="space-y-2">
-      {checks.map((check) => (
-        <div
-          key={check.id}
-          className="flex items-center space-x-3 bg-gray-900 p-3 rounded-lg"
-        >
-          {getStatusIcon(check.status)}
-          <span className="text-gray-300">{check.label}</span>
-        </div>
-      ))}
-    </div>
-  );
+        if (config.command && config.expected) {
+          // Command output validation
+          isValid = input.trim() === config.expected.trim();
+        } else if (config.pattern) {
+          // Regex pattern validation
+          const regex = new RegExp(config.pattern);
+          isValid = regex.test(input);
+        } else if (config.type === 'ui-check' && config.element) {
+          // UI element validation
+          // This would typically involve checking if a specific UI element exists/is visible
+          isValid = document.querySelector(`[data-testid="${config.element}"]`) !== null;
+        }
+
+        onValidationComplete(isValid);
+      } catch (error) {
+        console.error('Validation error:', error);
+        onValidationComplete(false);
+      }
+    };
+
+    validateInput();
+  }, [config, input, onValidationComplete]);
+
+  return null; // This is a non-visual component
 };

@@ -1,79 +1,87 @@
 import React, { useState } from 'react';
 import { Button } from '../ui/Button';
+import { ValidationChecker } from './ValidationChecker';
+
+interface ChallengeStep {
+  instruction: string;
+  validation: {
+    command?: string;
+    expected?: string;
+    pattern?: string;
+    type?: string;
+    element?: string;
+  };
+}
 
 interface Challenge {
-  id: string;
-  task: string;
-  hints: string[];
-  solution: string;
-  validation: (input: string) => boolean;
+  title: string;
+  description: string;
+  timeLimit?: number;
+  setup?: {
+    files?: Record<string, string>;
+    branches?: Record<string, Record<string, string>>;
+  };
+  steps: ChallengeStep[];
 }
 
 interface ChallengeContainerProps {
-  title: string;
-  description: string;
-  challenges: Challenge[];
+  challenge: Challenge;
   onComplete: () => void;
 }
 
 export const ChallengeContainer: React.FC<ChallengeContainerProps> = ({
-  title,
-  description,
-  challenges,
+  challenge,
   onComplete
 }) => {
-  const [currentChallenge, setCurrentChallenge] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
   const [userInput, setUserInput] = useState('');
-  const [showHint, setShowHint] = useState(false);
-  const [attempts, setAttempts] = useState(0);
   const [feedback, setFeedback] = useState('');
+  const [isValidating, setIsValidating] = useState(false);
 
-  const challenge = challenges[currentChallenge];
+  const step = challenge.steps[currentStep];
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    const isCorrect = challenge.validation(userInput.trim());
-    setAttempts(prev => prev + 1);
+  const handleValidationComplete = (isValid: boolean) => {
+    setIsValidating(false);
 
-    if (isCorrect) {
-      setFeedback('Correct! Well done!');
-      if (currentChallenge === challenges.length - 1) {
-        // All challenges completed
-        setTimeout(onComplete, 1500);
-      } else {
-        setTimeout(() => {
-          setCurrentChallenge(prev => prev + 1);
+    if (isValid) {
+      setFeedback('Correct! Moving to next step...');
+      setTimeout(() => {
+        if (currentStep === challenge.steps.length - 1) {
+          // All steps completed
+          onComplete();
+        } else {
+          setCurrentStep(prev => prev + 1);
           setUserInput('');
-          setShowHint(false);
           setFeedback('');
-          setAttempts(0);
-        }, 1500);
-      }
+        }
+      }, 1500);
     } else {
-      setFeedback('Not quite right. Try again!');
-      if (attempts >= 2 && !showHint) {
-        setShowHint(true);
-      }
+      setFeedback('Not quite right. Please try again.');
     }
   };
 
-  const handleShowSolution = () => {
-    setUserInput(challenge.solution);
-    setFeedback('Here\'s the solution. Take a moment to understand it!');
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsValidating(true);
   };
 
   return (
     <div className="bg-gray-800 rounded-lg overflow-hidden">
       <div className="p-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">{title}</h2>
-        <p className="text-gray-300 mb-6">{description}</p>
+        <h2 className="text-2xl font-bold mb-4 text-white">{challenge.title}</h2>
+        <p className="text-gray-300 mb-6">{challenge.description}</p>
+
+        {challenge.timeLimit && (
+          <div className="mb-4 text-yellow-300">
+            Time Limit: {Math.floor(challenge.timeLimit / 60)} minutes
+          </div>
+        )}
 
         <div className="bg-gray-700 rounded-lg p-6 mb-6">
           <h3 className="text-lg font-semibold mb-3 text-white">
-            Challenge {currentChallenge + 1} of {challenges.length}
+            Step {currentStep + 1} of {challenge.steps.length}
           </h3>
-          <p className="text-gray-300 mb-4">{challenge.task}</p>
+          <p className="text-gray-300 mb-4">{step.instruction}</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -83,33 +91,18 @@ export const ChallengeContainer: React.FC<ChallengeContainerProps> = ({
                 className="w-full bg-gray-900 text-white p-4 rounded-lg font-mono"
                 rows={4}
                 placeholder="Enter your solution here..."
+                disabled={isValidating}
               />
             </div>
 
             <div className="flex justify-between items-center">
-              <div className="space-x-4">
-                <Button type="submit" variant="primary">
-                  Submit
-                </Button>
-                {attempts >= 3 && (
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={handleShowSolution}
-                  >
-                    Show Solution
-                  </Button>
-                )}
-              </div>
-              {showHint && (
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={() => setShowHint(false)}
-                >
-                  Hide Hint
-                </Button>
-              )}
+              <Button 
+                type="submit" 
+                variant="primary"
+                disabled={isValidating}
+              >
+                {isValidating ? 'Validating...' : 'Submit'}
+              </Button>
             </div>
           </form>
 
@@ -117,24 +110,23 @@ export const ChallengeContainer: React.FC<ChallengeContainerProps> = ({
             <div className={`mt-4 p-4 rounded-lg ${
               feedback.includes('Correct') 
                 ? 'bg-green-800 text-green-100'
-                : 'bg-red-800 text-red-100'
+                : feedback.includes('Error')
+                  ? 'bg-red-800 text-red-100'
+                  : 'bg-blue-800 text-blue-100'
             }`}>
               {feedback}
             </div>
           )}
-
-          {showHint && (
-            <div className="mt-4 p-4 bg-blue-900 text-blue-100 rounded-lg">
-              <h4 className="font-semibold mb-2">Hint:</h4>
-              <ul className="list-disc list-inside">
-                {challenge.hints.map((hint, index) => (
-                  <li key={index}>{hint}</li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
       </div>
+
+      {isValidating && (
+        <ValidationChecker
+          config={step.validation}
+          input={userInput}
+          onValidationComplete={handleValidationComplete}
+        />
+      )}
     </div>
   );
 };

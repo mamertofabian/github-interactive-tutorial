@@ -3,9 +3,10 @@ import { useTutorialContext } from '../../contexts/TutorialContext';
 import { ConceptCard } from '../educational/ConceptCard';
 import { TermDefinition } from '../educational/TermDefinition';
 import { StepGuide } from '../educational/StepGuide';
+import { ChallengeContainer } from '../challenges/ChallengeContainer';
 
 export const TutorialContainer: React.FC = () => {
-  const { content, currentSection, setCurrentSection, getSectionById } = useTutorialContext();
+  const { content, currentSection, setCurrentSection, getSectionById, updateProgress } = useTutorialContext();
   const section = currentSection ? getSectionById(currentSection) : content.sections[0];
 
   if (!section) return null;
@@ -22,6 +23,11 @@ export const TutorialContainer: React.FC = () => {
     if (currentIndex > 0) {
       setCurrentSection(content.sections[currentIndex - 1].id);
     }
+  };
+
+  const handleChallengeComplete = () => {
+    updateProgress(section.id);
+    handleNextSection();
   };
 
   return (
@@ -41,6 +47,78 @@ export const TutorialContainer: React.FC = () => {
                 title={concept.title}
                 description={concept.description}
                 visualization={concept.visualization}
+              />
+            ))}
+          </div>
+        )}
+
+        {section.content.features && (
+          <div className="space-y-6 mb-8">
+            <h3 className="text-lg font-semibold text-white">Features</h3>
+            {section.content.features.map((feature, index) => (
+              <div key={index} className="bg-gray-700 p-6 rounded-lg">
+                <h4 className="text-white font-medium text-lg mb-3">{feature.title}</h4>
+                <p className="text-gray-300 mb-4">{feature.description}</p>
+                {feature.examples && (
+                  <div className="space-y-4">
+                    {feature.examples.map((example, exampleIndex) => (
+                      <div key={exampleIndex} className="bg-gray-600 p-4 rounded-lg">
+                        {example.type && (
+                          <h5 className="text-blue-400 font-medium mb-3">{example.type}</h5>
+                        )}
+                        {example.template && (
+                          <div className="space-y-2">
+                            <p className="text-white font-medium">{example.template.title}</p>
+                            <p className="text-gray-300">{example.template.description}</p>
+                            {example.template.steps && (
+                              <ul className="list-disc list-inside text-gray-300 ml-4">
+                                {example.template.steps.map((step, stepIndex) => (
+                                  <li key={stepIndex}>{step}</li>
+                                ))}
+                              </ul>
+                            )}
+                            {example.template.labels && (
+                              <div className="flex gap-2 mt-2">
+                                {example.template.labels.map((label, labelIndex) => (
+                                  <span key={labelIndex} className="px-2 py-1 bg-gray-700 rounded text-sm text-blue-400">
+                                    {label}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        {example.columns && (
+                          <div className="grid grid-cols-3 gap-4">
+                            {example.columns.map((column, columnIndex) => (
+                              <div key={columnIndex} className="bg-gray-700 p-3 rounded">
+                                <h6 className="text-white font-medium mb-2">{column.name}</h6>
+                                <ul className="space-y-2">
+                                  {column.items.map((item, itemIndex) => (
+                                    <li key={itemIndex} className="text-gray-300 text-sm">{item}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {section.content.challenges && (
+          <div className="space-y-6 mb-8">
+            <h3 className="text-lg font-semibold text-white">Interactive Challenges</h3>
+            {section.content.challenges.map((challenge, index) => (
+              <ChallengeContainer
+                key={index}
+                challenge={challenge}
+                onComplete={handleChallengeComplete}
               />
             ))}
           </div>

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import tutorialContent from '../data/tutorial-content-advanced.json';
+import advancedContent from '../data/tutorial-content-advanced.json';
+import finalContent from '../data/tutorial-content-final.json';
 
 // Make visualization type more flexible
 interface BaseVisualization {
@@ -19,12 +20,55 @@ type Visualization = DataVisualization | StepsVisualization;
 interface PracticeStep {
   action: string;
   command?: string;
-  explanation: string;
+  explanation?: string;
+  steps?: string[];
+}
+
+interface ChallengeStep {
+  instruction: string;
+  validation: {
+    command?: string;
+    expected?: string;
+    pattern?: string;
+    type?: string;
+    element?: string;
+  };
 }
 
 interface Practice {
   title?: string;
   steps: PracticeStep[];
+}
+
+interface Example {
+  type?: string;
+  template?: {
+    title: string;
+    description: string;
+    steps?: string[];
+    labels?: string[];
+  };
+  columns?: {
+    name: string;
+    items: string[];
+  }[];
+}
+
+interface Feature {
+  title: string;
+  description: string;
+  examples?: Example[];
+}
+
+interface Challenge {
+  title: string;
+  description: string;
+  timeLimit?: number;
+  setup?: {
+    files?: Record<string, string>;
+    branches?: Record<string, Record<string, string>>;
+  };
+  steps: ChallengeStep[];
 }
 
 interface Concept {
@@ -74,6 +118,8 @@ interface Section {
     practice?: Practice;
     commands?: Command[];
     bestPractices?: Guideline[];
+    features?: Feature[];
+    challenges?: Challenge[];
   };
 }
 
@@ -105,7 +151,13 @@ interface TutorialProviderProps {
 
 export const TutorialProvider: React.FC<TutorialProviderProps> = ({ children }) => {
   const [currentSection, setCurrentSection] = useState<string | null>(null);
-  const [content] = useState<TutorialContent>(tutorialContent);
+  
+  // Combine advanced and final content
+  const combinedContent: TutorialContent = {
+    sections: [...advancedContent.sections, ...finalContent.sections]
+  };
+  
+  const [content] = useState<TutorialContent>(combinedContent);
 
   const getSectionById = (id: string) => {
     return content.sections.find(section => section.id === id);
