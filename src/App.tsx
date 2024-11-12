@@ -1,4 +1,3 @@
-import React from 'react';
 import { Layout } from './components/core/Layout';
 import { TutorialProvider } from './contexts/TutorialContext';
 import { TutorialContainer } from './components/core/TutorialContainer';

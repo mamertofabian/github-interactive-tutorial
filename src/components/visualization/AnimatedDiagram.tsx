@@ -10,10 +10,7 @@ interface AnimatedDiagramProps {
 }
 
 export const AnimatedDiagram: React.FC<AnimatedDiagramProps> = ({
-  animationSpeed = 1,
   showControls = true,
-  autoPlay = false,
-  loop = false,
   width = 600,
   height = 400,
 }) => {

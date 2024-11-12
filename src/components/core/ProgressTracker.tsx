@@ -2,17 +2,6 @@ import React from 'react';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { useTutorialContext } from '../../contexts/TutorialContext';
 
-const steps = [
-  { id: 'intro', name: 'Introduction', completed: true },
-  { id: 'setup', name: 'Environment Setup', completed: true },
-  { id: 'first-repo', name: 'First Repository', completed: true },
-  { id: 'branching', name: 'Understanding Branching', completed: false },
-  { id: 'collaboration', name: 'Collaborating on GitHub', completed: false },
-  { id: 'conflicts', name: 'Handling Conflicts', completed: false },
-  { id: 'best-practices', name: 'Git Commands & Best Practices', completed: false },
-  { id: 'project-management', name: 'Project Management', completed: false },
-  { id: 'interactive-challenges', name: 'Interactive Challenges', completed: false },
-];
 
 export const ProgressTracker: React.FC = () => {
   const { setCurrentSection, content } = useTutorialContext();

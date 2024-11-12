@@ -14,7 +14,6 @@ interface ProcessAnimationProps {
 
 export const ProcessAnimation: React.FC<ProcessAnimationProps> = ({
   steps = [],
-  speed = 1000,
   autoStart = false,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);

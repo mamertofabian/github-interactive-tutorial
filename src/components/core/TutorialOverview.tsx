@@ -50,7 +50,7 @@ const TutorialOverview: React.FC = () => {
         <div className="mb-12">
           <h2 className="text-2xl font-bold mb-6">Course Structure</h2>
           <div className="space-y-4">
-            {lessons.map((lesson, index) => (
+            {(content?.sections || []).map((lesson: { id: string; title: string; description: string; duration?: string; difficulty?: string }, index: number) => (
               <div key={lesson.id} className="bg-gray-800 p-6 rounded-lg">
                 <div className="flex items-start justify-between">
                   <div>

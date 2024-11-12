@@ -3,11 +3,7 @@ import { NavigationBar } from './NavigationBar';
 import { ProgressTracker } from './ProgressTracker';
 import { TutorialContainer } from './TutorialContainer';
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-export const Layout: React.FC<LayoutProps> = ({ children }) => {
+export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="min-h-screen bg-gray-900">
       <NavigationBar />
