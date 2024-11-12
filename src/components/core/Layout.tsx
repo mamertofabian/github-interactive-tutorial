@@ -10,9 +10,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       <div className="flex">
         <ProgressTracker />
         <main className="flex-1">
-          <TutorialContainer>
-            {children}
-          </TutorialContainer>
+          {children}
         </main>
       </div>
     </div>

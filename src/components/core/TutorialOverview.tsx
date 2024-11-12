@@ -5,7 +5,7 @@ import { Button } from '../ui/Button';
 
 const TutorialOverview: React.FC = () => {
   const navigate = useNavigate();
-  const { lessons } = useTutorialContext();
+  const { content } = useTutorialContext();
 
   const features = [
     {
