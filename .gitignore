@@ -1,3 +1,5 @@
 node_modules
 synced/
 project-bolt-*.zip
+.aider*
+.env
