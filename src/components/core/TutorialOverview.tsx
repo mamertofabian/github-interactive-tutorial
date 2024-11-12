@@ -60,21 +60,19 @@ const TutorialOverview: React.FC = () => {
                       </span>
                       <h3 className="text-xl font-semibold">{section.title}</h3>
                     </div>
-                    <p className="text-gray-300 mt-2">{section.content}</p>
-                    {section.metadata && (
-                      <div className="mt-3 flex items-center space-x-4">
-                        {section.metadata.duration && (
-                          <span className="text-sm text-gray-400">
-                            ⏱️ {section.metadata.duration}
-                          </span>
-                        )}
-                        {section.metadata.difficulty && (
-                          <span className="text-sm text-gray-400">
-                            📚 {section.metadata.difficulty}
-                          </span>
-                        )}
-                      </div>
-                    )}
+                    <p className="text-gray-300 mt-2">{section.overview}</p>
+                    <div className="mt-3 flex items-center space-x-4">
+                      {section.steps && (
+                        <span className="text-sm text-gray-400">
+                          ⏱️ {`${section.steps.length} steps`}
+                        </span>
+                      )}
+                      {section.challenges && (
+                        <span className="text-sm text-gray-400">
+                          📚 {`${section.challenges.length} challenges`}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
