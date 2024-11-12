@@ -3,3 +3,5 @@ synced/
 project-bolt-*.zip
 .aider*
 .env
+
+dist/

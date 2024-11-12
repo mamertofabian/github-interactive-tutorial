@@ -60,16 +60,16 @@ const TutorialOverview: React.FC = () => {
                       </span>
                       <h3 className="text-xl font-semibold">{section.title}</h3>
                     </div>
-                    <p className="text-gray-300 mt-2">{section.overview}</p>
+                    <p className="text-gray-300 mt-2">{section.content.overview}</p>
                     <div className="mt-3 flex items-center space-x-4">
-                      {section.steps && (
+                      {section.content.steps && (
                         <span className="text-sm text-gray-400">
-                          ⏱️ {`${section.steps.length} steps`}
+                          ⏱️ {`${section.content.steps.length} steps`}
                         </span>
                       )}
-                      {section.challenges && (
+                      {section.content.challenges && (
                         <span className="text-sm text-gray-400">
-                          📚 {`${section.challenges.length} challenges`}
+                          📚 {`${section.content.challenges.length} challenges`}
                         </span>
                       )}
                     </div>
