@@ -1,13 +1,16 @@
 import React from 'react';
-import { Sidebar } from './components/Sidebar';
-import { Content } from './components/Content';
+import { Layout } from './components/core/Layout';
 
 function App() {
   return (
-    <div className="flex min-h-screen bg-gray-900">
-      <Sidebar />
-      <Content />
-    </div>
+    <Layout>
+      <div className="text-white">
+        <h1 className="text-3xl font-bold mb-4">Welcome to Git Tutorial</h1>
+        <p className="text-gray-300">
+          Learn Git from basics to advanced concepts with interactive lessons.
+        </p>
+      </div>
+    </Layout>
   );
 }
 
