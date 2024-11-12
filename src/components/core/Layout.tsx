@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavigationBar } from './NavigationBar';
 import { ProgressTracker } from './ProgressTracker';
-import { TutorialContainer } from './TutorialContainer';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
