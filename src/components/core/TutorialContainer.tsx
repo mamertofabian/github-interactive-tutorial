@@ -28,7 +28,6 @@ export const TutorialContainer: React.FC = () => {
     <div className="p-6 bg-gray-800 rounded-lg m-4">
       <div className="max-w-4xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-white mb-2">{content.title}</h1>
           <h2 className="text-xl font-bold text-white">{section.title}</h2>
           <p className="text-gray-300 mt-2">{section.content.overview}</p>
         </div>
@@ -78,21 +77,66 @@ export const TutorialContainer: React.FC = () => {
         )}
 
         {section.content.practice && (
-          <div className="space-y-6">
+          <div className="space-y-6 mb-8">
             <h3 className="text-lg font-semibold text-white">Practice</h3>
             <div className="bg-gray-700 p-4 rounded-lg">
-              <h4 className="text-white font-medium mb-4">{section.content.practice.title}</h4>
+              {section.content.practice.title && (
+                <h4 className="text-white font-medium mb-4">{section.content.practice.title}</h4>
+              )}
               <div className="space-y-4">
                 {section.content.practice.steps.map((step, index) => (
                   <div key={index} className="bg-gray-600 p-4 rounded">
                     <p className="text-white font-medium mb-2">{step.action}</p>
-                    <code className="block bg-gray-800 p-2 rounded text-green-400 mb-2">
-                      {step.command}
-                    </code>
+                    {step.command && (
+                      <code className="block bg-gray-800 p-2 rounded text-green-400 mb-2">
+                        {step.command}
+                      </code>
+                    )}
                     <p className="text-gray-300 text-sm">{step.explanation}</p>
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        )}
+
+        {section.content.commands && (
+          <div className="space-y-6 mb-8">
+            <h3 className="text-lg font-semibold text-white">Useful Commands</h3>
+            <div className="space-y-4">
+              {section.content.commands.map((command, index) => (
+                <div key={index} className="bg-gray-700 p-4 rounded-lg">
+                  <code className="block bg-gray-800 p-2 rounded text-green-400 mb-2">
+                    {command.command}
+                  </code>
+                  <p className="text-gray-300 mb-2">{command.description}</p>
+                  <div className="bg-gray-600 p-2 rounded">
+                    <p className="text-sm text-gray-300">Example:</p>
+                    <code className="text-green-400 text-sm">{command.example}</code>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {section.content.bestPractices && (
+          <div className="space-y-6 mb-8">
+            <h3 className="text-lg font-semibold text-white">Best Practices</h3>
+            <div className="space-y-4">
+              {section.content.bestPractices.map((practice, index) => (
+                <div key={index} className="bg-gray-700 p-4 rounded-lg">
+                  <h4 className="text-white font-medium mb-3">{practice.title}</h4>
+                  <ul className="space-y-2">
+                    {practice.guidelines.map((guideline, guidelineIndex) => (
+                      <li key={guidelineIndex} className="flex items-start text-gray-300">
+                        <span className="text-blue-400 mr-2">•</span>
+                        {guideline}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         )}

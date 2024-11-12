@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import tutorialContent from '../data/tutorial-content.json';
+import tutorialContent from '../data/tutorial-content-advanced.json';
 
 // Make visualization type more flexible
 interface BaseVisualization {
@@ -16,10 +16,23 @@ interface StepsVisualization extends BaseVisualization {
 
 type Visualization = DataVisualization | StepsVisualization;
 
+interface PracticeStep {
+  action: string;
+  command?: string;
+  explanation: string;
+}
+
+interface Practice {
+  title?: string;
+  steps: PracticeStep[];
+}
+
 interface Concept {
   title: string;
   description: string;
   visualization?: Visualization;
+  practice?: Practice;
+  steps?: string[];
 }
 
 interface KeyTerm {
@@ -39,6 +52,17 @@ interface Step {
   visualization?: Visualization;
 }
 
+interface Guideline {
+  title: string;
+  guidelines: string[];
+}
+
+interface Command {
+  command: string;
+  description: string;
+  example: string;
+}
+
 interface Section {
   id: string;
   title: string;
@@ -47,19 +71,13 @@ interface Section {
     concepts?: Concept[];
     keyTerms?: KeyTerm[];
     steps?: Step[];
-    practice?: {
-      title: string;
-      steps: Array<{
-        action: string;
-        command: string;
-        explanation: string;
-      }>;
-    };
+    practice?: Practice;
+    commands?: Command[];
+    bestPractices?: Guideline[];
   };
 }
 
 interface TutorialContent {
-  title: string;
   sections: Section[];
 }
 

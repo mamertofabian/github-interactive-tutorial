@@ -1,4 +1,6 @@
 import React from 'react';
+import { BranchVisualizer } from './BranchVisualizer';
+import { ConflictResolver } from './ConflictResolver';
 
 interface Visualization {
   type: string;
@@ -86,6 +88,80 @@ export const VisualizationContainer: React.FC<VisualizationContainerProps> = ({
     );
   };
 
+  const renderBranchFlow = (data: any) => {
+    const branches = [
+      {
+        name: data.mainBranch,
+        commits: ['Initial commit'],
+        isActive: true
+      },
+      ...data.branches.map((branch: any) => ({
+        name: branch.name,
+        commits: branch.changes,
+        isActive: false
+      }))
+    ];
+
+    return (
+      <div className="space-y-6">
+        <BranchVisualizer
+          branches={branches}
+          onBranchSelect={(branchName) => {
+            console.log(`Selected branch: ${branchName}`);
+          }}
+        />
+        <div className="mt-4">
+          {data.branches.map((branch: any, index: number) => (
+            <div key={index} className="mt-4 border-l-2 border-blue-500 pl-4">
+              <h5 className="text-blue-400 font-medium">Branch: {branch.name}</h5>
+              <p className="text-gray-300 text-sm">Starting from: {branch.startPoint}</p>
+              <div className="mt-2 space-y-1">
+                {branch.changes.map((change: string, changeIndex: number) => (
+                  <div key={changeIndex} className="text-gray-300 flex items-center">
+                    <span className="text-green-400 mr-2">+</span>
+                    {change}
+                  </div>
+                ))}
+              </div>
+              {branch.mergeBack && (
+                <div className="mt-2 text-green-400 text-sm">
+                  ↩ Merges back to {data.mainBranch}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const renderConflictExample = (data: any) => {
+    const conflicts = [
+      {
+        path: 'example.js',
+        currentChanges: data.yourChange,
+        incomingChanges: data.theirChange
+      }
+    ];
+
+    return (
+      <div className="space-y-4">
+        <div className="bg-gray-700 p-4 rounded-lg">
+          <h4 className="text-white font-medium mb-2">Original Code</h4>
+          <pre className="bg-gray-800 p-2 rounded text-gray-300 font-mono text-sm">
+            {data.original}
+          </pre>
+        </div>
+        <ConflictResolver
+          conflicts={conflicts}
+          onResolve={(resolutions) => {
+            console.log('Resolved conflicts:', resolutions);
+          }}
+        />
+      </div>
+    );
+  };
+
   const renderContent = () => {
     switch (visualization.type) {
       case 'timeline':
@@ -94,6 +170,10 @@ export const VisualizationContainer: React.FC<VisualizationContainerProps> = ({
         return renderDiagram(visualization.data);
       case 'comparison':
         return renderComparison(visualization.items || []);
+      case 'branchFlow':
+        return renderBranchFlow(visualization.data);
+      case 'conflictExample':
+        return renderConflictExample(visualization.data);
       case 'screenshot':
         return (
           <div className="text-center">
