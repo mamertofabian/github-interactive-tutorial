@@ -1,0 +1,201 @@
+{
+  "sections": [
+    {
+      "id": "branching",
+      "title": "Understanding Branching",
+      "content": {
+        "overview": "Branches allow you to work on different versions of your code simultaneously, making it easier to develop new features or fix bugs without affecting the main codebase.",
+        "concepts": [
+          {
+            "title": "What is a Branch?",
+            "description": "A branch is like a parallel universe for your code. You can make changes in this universe without affecting the main timeline until you're ready to merge them.",
+            "visualization": {
+              "type": "branchFlow",
+              "data": {
+                "mainBranch": "main",
+                "branches": [
+                  {
+                    "name": "feature",
+                    "startPoint": "main",
+                    "changes": ["Add new feature", "Fix bug", "Update docs"],
+                    "mergeBack": true
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "practice": {
+          "title": "Working with Branches",
+          "steps": [
+            {
+              "action": "Create a new branch",
+              "command": "git checkout -b feature-branch",
+              "explanation": "Creates and switches to a new branch named 'feature-branch'"
+            },
+            {
+              "action": "Make changes",
+              "command": "echo 'New feature' > feature.txt",
+              "explanation": "Add some changes to your branch"
+            },
+            {
+              "action": "Commit changes",
+              "command": "git add feature.txt && git commit -m \"Add new feature\"",
+              "explanation": "Save your changes in the feature branch"
+            },
+            {
+              "action": "Switch back to main",
+              "command": "git checkout main",
+              "explanation": "Return to the main branch"
+            },
+            {
+              "action": "Merge changes",
+              "command": "git merge feature-branch",
+              "explanation": "Bring your feature branch changes into main"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "collaboration",
+      "title": "Collaborating on GitHub",
+      "content": {
+        "overview": "GitHub makes it easy to work with others on the same project. Let's learn how to clone repositories, create pull requests, and handle remote collaboration.",
+        "concepts": [
+          {
+            "title": "Cloning Repositories",
+            "description": "Cloning creates a local copy of a remote repository, complete with all its history.",
+            "practice": {
+              "steps": [
+                {
+                  "action": "Clone a repository",
+                  "command": "git clone https://github.com/username/repository.git",
+                  "explanation": "Downloads a complete copy of the repository to your computer"
+                }
+              ]
+            }
+          },
+          {
+            "title": "Pull Requests",
+            "description": "Pull requests are proposals to merge changes from one branch into another, typically used to suggest changes to a project.",
+            "steps": [
+              "Fork the repository to your account",
+              "Clone your fork locally",
+              "Create a new branch for your changes",
+              "Push your changes to your fork",
+              "Create a pull request on GitHub"
+            ]
+          }
+        ],
+        "practice": {
+          "title": "Collaborative Workflow",
+          "steps": [
+            {
+              "action": "Fork a repository",
+              "explanation": "Click the 'Fork' button on GitHub"
+            },
+            {
+              "action": "Clone your fork",
+              "command": "git clone https://github.com/your-username/repository.git",
+              "explanation": "Create a local copy of your fork"
+            },
+            {
+              "action": "Add upstream remote",
+              "command": "git remote add upstream https://github.com/original-owner/repository.git",
+              "explanation": "Keep track of the original repository"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "conflicts",
+      "title": "Handling Conflicts",
+      "content": {
+        "overview": "When multiple people make changes to the same code, conflicts can occur. Learning to resolve these conflicts is an essential skill.",
+        "concepts": [
+          {
+            "title": "What are Merge Conflicts?",
+            "description": "Conflicts happen when Git can't automatically merge changes because they affect the same lines of code.",
+            "visualization": {
+              "type": "conflictExample",
+              "data": {
+                "original": "console.log('Hello World');",
+                "yourChange": "console.log('Hello GitHub');",
+                "theirChange": "console.log('Hello Git');"
+              }
+            }
+          }
+        ],
+        "practice": {
+          "title": "Resolving Conflicts",
+          "steps": [
+            {
+              "action": "Identify conflicts",
+              "explanation": "Git marks conflicts in files with special markers"
+            },
+            {
+              "action": "Choose changes",
+              "explanation": "Decide which changes to keep or combine them"
+            },
+            {
+              "action": "Mark as resolved",
+              "command": "git add resolved-file.txt",
+              "explanation": "Tell Git you've resolved the conflict"
+            },
+            {
+              "action": "Complete the merge",
+              "command": "git commit -m \"Resolve merge conflict\"",
+              "explanation": "Finish the merge process"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "best-practices",
+      "title": "Useful Git Commands & Best Practices",
+      "content": {
+        "overview": "Let's explore some common Git commands and learn best practices for managing your repositories effectively.",
+        "commands": [
+          {
+            "command": "git status",
+            "description": "Shows the status of your working directory",
+            "example": "git status"
+          },
+          {
+            "command": "git log",
+            "description": "Shows commit history",
+            "example": "git log --oneline"
+          },
+          {
+            "command": "git diff",
+            "description": "Shows changes between commits",
+            "example": "git diff HEAD~1 HEAD"
+          }
+        ],
+        "bestPractices": [
+          {
+            "title": "Commit Messages",
+            "guidelines": [
+              "Use present tense ('Add feature' not 'Added feature')",
+              "Be specific about what changed",
+              "Keep messages concise but descriptive",
+              "Reference issue numbers when applicable"
+            ]
+          },
+          {
+            "title": "Branch Names",
+            "guidelines": [
+              "Use descriptive names (feature/add-login)",
+              "Include issue numbers when relevant",
+              "Use hyphens to separate words",
+              "Keep names concise"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

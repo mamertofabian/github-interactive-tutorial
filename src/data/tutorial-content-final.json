@@ -1,0 +1,208 @@
+{
+  "sections": [
+    {
+      "id": "project-management",
+      "title": "Using GitHub for Project Management",
+      "content": {
+        "overview": "GitHub isn't just for code - it's also a powerful project management tool. Let's explore how to use Issues and Projects to organize your work.",
+        "features": [
+          {
+            "title": "Issues",
+            "description": "Issues are used to track todos, bugs, feature requests, and more.",
+            "examples": [
+              {
+                "type": "Bug Report",
+                "template": {
+                  "title": "Login button not working",
+                  "description": "When clicking the login button, nothing happens.",
+                  "steps": [
+                    "Go to login page",
+                    "Fill in credentials",
+                    "Click login button"
+                  ],
+                  "labels": ["bug", "high-priority"]
+                }
+              },
+              {
+                "type": "Feature Request",
+                "template": {
+                  "title": "Add dark mode support",
+                  "description": "Users should be able to switch between light and dark themes.",
+                  "labels": ["enhancement", "ui"]
+                }
+              }
+            ]
+          },
+          {
+            "title": "Projects",
+            "description": "Projects help you organize and prioritize your work using boards, lists, and cards.",
+            "examples": [
+              {
+                "type": "Kanban Board",
+                "columns": [
+                  {
+                    "name": "To Do",
+                    "items": ["Set up repository", "Create README"]
+                  },
+                  {
+                    "name": "In Progress",
+                    "items": ["Implement login feature"]
+                  },
+                  {
+                    "name": "Done",
+                    "items": ["Project setup"]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "practice": {
+          "title": "Managing Your Project",
+          "steps": [
+            {
+              "action": "Create an issue",
+              "steps": [
+                "Click 'Issues' tab",
+                "Click 'New Issue'",
+                "Fill in title and description",
+                "Add labels and assignees",
+                "Submit issue"
+              ]
+            },
+            {
+              "action": "Set up a project board",
+              "steps": [
+                "Go to 'Projects' tab",
+                "Click 'New Project'",
+                "Choose template (e.g., Kanban)",
+                "Add columns and cards",
+                "Start organizing tasks"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "interactive-challenges",
+      "title": "Interactive Challenges and Exercises",
+      "content": {
+        "overview": "Put your knowledge to the test with these hands-on challenges. Each challenge will help reinforce what you've learned.",
+        "challenges": [
+          {
+            "title": "Branch and Merge Challenge",
+            "description": "Create a new branch, make changes, and merge it back to main.",
+            "timeLimit": 600,
+            "steps": [
+              {
+                "instruction": "Create a new branch called 'feature-readme'",
+                "validation": {
+                  "command": "git branch --list",
+                  "expected": "feature-readme"
+                }
+              },
+              {
+                "instruction": "Switch to the new branch",
+                "validation": {
+                  "command": "git branch --show-current",
+                  "expected": "feature-readme"
+                }
+              },
+              {
+                "instruction": "Update README.md with a project description",
+                "validation": {
+                  "command": "git status",
+                  "expected": "modified: README.md"
+                }
+              },
+              {
+                "instruction": "Commit your changes",
+                "validation": {
+                  "command": "git log -1 --oneline",
+                  "pattern": ".*README.*"
+                }
+              },
+              {
+                "instruction": "Merge changes back to main",
+                "validation": {
+                  "command": "git log main -1 --oneline",
+                  "pattern": ".*README.*"
+                }
+              }
+            ]
+          },
+          {
+            "title": "Conflict Resolution Challenge",
+            "description": "Practice resolving merge conflicts in a controlled environment.",
+            "timeLimit": 900,
+            "setup": {
+              "files": {
+                "greeting.txt": "Hello, World!"
+              },
+              "branches": {
+                "feature-1": {
+                  "greeting.txt": "Hello, GitHub!"
+                },
+                "feature-2": {
+                  "greeting.txt": "Hello, Git!"
+                }
+              }
+            },
+            "steps": [
+              {
+                "instruction": "Merge feature-1 into main",
+                "validation": {
+                  "command": "git log -1 --oneline",
+                  "pattern": "merge.*feature-1"
+                }
+              },
+              {
+                "instruction": "Try to merge feature-2 and resolve the conflict",
+                "validation": {
+                  "command": "cat greeting.txt",
+                  "pattern": "(Hello, GitHub!)|(Hello, Git!)|(Hello, World!)"
+                }
+              }
+            ]
+          },
+          {
+            "title": "Pull Request Challenge",
+            "description": "Create a pull request and review changes.",
+            "timeLimit": 1200,
+            "steps": [
+              {
+                "instruction": "Fork the practice repository",
+                "validation": {
+                  "type": "ui-check",
+                  "element": "forked-repo-link"
+                }
+              },
+              {
+                "instruction": "Clone your fork locally",
+                "validation": {
+                  "command": "git remote -v",
+                  "pattern": "origin.*github.com/.*"
+                }
+              },
+              {
+                "instruction": "Create a new branch and make changes",
+                "validation": {
+                  "command": "git status",
+                  "pattern": "On branch.*"
+                }
+              },
+              {
+                "instruction": "Push changes and create pull request",
+                "validation": {
+                  "type": "ui-check",
+                  "element": "pull-request-link"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

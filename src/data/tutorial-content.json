@@ -1,0 +1,184 @@
+{
+  "title": "GitHub for Beginners: Interactive Tutorial",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Introduction to Git and GitHub",
+      "content": {
+        "overview": "Let's start by understanding what Git and GitHub are, and how they help developers collaborate on code.",
+        "concepts": [
+          {
+            "title": "What is Git?",
+            "description": "Git is like a time machine for your code. It tracks every change you make, allowing you to view history and revert changes if needed.",
+            "visualization": {
+              "type": "timeline",
+              "data": {
+                "points": [
+                  { "label": "Initial Code", "description": "You write your first version" },
+                  { "label": "Changes", "description": "You make updates to the code" },
+                  { "label": "Save (Commit)", "description": "Git saves a snapshot of changes" },
+                  { "label": "History", "description": "You can view or restore any version" }
+                ]
+              }
+            }
+          },
+          {
+            "title": "What is GitHub?",
+            "description": "GitHub is like a cloud library for your Git repositories. It's where developers store their code and collaborate with others.",
+            "visualization": {
+              "type": "diagram",
+              "data": {
+                "center": "GitHub",
+                "connections": [
+                  { "label": "Developer 1", "action": "Push/Pull Code" },
+                  { "label": "Developer 2", "action": "Push/Pull Code" },
+                  { "label": "Developer 3", "action": "Push/Pull Code" }
+                ]
+              }
+            }
+          }
+        ],
+        "keyTerms": [
+          {
+            "term": "Repository",
+            "definition": "A project's folder containing all files and their history"
+          },
+          {
+            "term": "Commit",
+            "definition": "A saved snapshot of your changes"
+          },
+          {
+            "term": "Clone",
+            "definition": "Creating a local copy of a repository"
+          },
+          {
+            "term": "Push",
+            "definition": "Uploading your commits to GitHub"
+          },
+          {
+            "term": "Pull",
+            "definition": "Downloading changes from GitHub"
+          }
+        ]
+      }
+    },
+    {
+      "id": "setup",
+      "title": "Setting Up Your Environment",
+      "content": {
+        "overview": "Before we start using Git and GitHub, let's set up your development environment.",
+        "steps": [
+          {
+            "title": "Installing Git",
+            "instructions": [
+              {
+                "os": "Windows",
+                "steps": [
+                  "Download Git from git-scm.com",
+                  "Run the installer with default settings",
+                  "Open Command Prompt to verify with 'git --version'"
+                ]
+              },
+              {
+                "os": "macOS",
+                "steps": [
+                  "Open Terminal",
+                  "Install Homebrew if needed",
+                  "Run 'brew install git'",
+                  "Verify with 'git --version'"
+                ]
+              },
+              {
+                "os": "Linux",
+                "steps": [
+                  "Open Terminal",
+                  "Run 'sudo apt-get update'",
+                  "Run 'sudo apt-get install git'",
+                  "Verify with 'git --version'"
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Creating a GitHub Account",
+            "steps": [
+              "Visit github.com",
+              "Click 'Sign up'",
+              "Enter your email and create a password",
+              "Choose a username",
+              "Complete the verification process"
+            ],
+            "visualization": {
+              "type": "screenshot",
+              "steps": [
+                "github-signup-page",
+                "github-dashboard"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "first-repo",
+      "title": "Creating Your First Repository",
+      "content": {
+        "overview": "Now that we're set up, let's create your first Git repository and understand how local and remote repositories work together.",
+        "concepts": [
+          {
+            "title": "Local vs Remote Repositories",
+            "description": "A local repository lives on your computer, while a remote repository is hosted on GitHub. They work together to keep your code synchronized.",
+            "visualization": {
+              "type": "comparison",
+              "items": [
+                {
+                  "title": "Local Repository",
+                  "points": [
+                    "Lives on your computer",
+                    "Where you make changes",
+                    "Full history available offline",
+                    "Created with 'git init'"
+                  ]
+                },
+                {
+                  "title": "Remote Repository",
+                  "points": [
+                    "Hosted on GitHub",
+                    "Shared with others",
+                    "Backup of your code",
+                    "Created on github.com"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "practice": {
+          "title": "Create Your First Repository",
+          "steps": [
+            {
+              "action": "Initialize a local repository",
+              "command": "git init",
+              "explanation": "Creates a new Git repository in your current folder"
+            },
+            {
+              "action": "Add a file",
+              "command": "echo 'Hello World' > README.md",
+              "explanation": "Creates a simple README file"
+            },
+            {
+              "action": "Stage the file",
+              "command": "git add README.md",
+              "explanation": "Prepares the file to be committed"
+            },
+            {
+              "action": "Commit the file",
+              "command": "git commit -m \"First commit\"",
+              "explanation": "Saves the changes with a descriptive message"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
