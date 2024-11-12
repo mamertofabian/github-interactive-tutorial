@@ -20,26 +20,24 @@ export const NavigationBar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-gray-800 border-b border-gray-700">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+    <nav className="bg-gray-900 border-b border-gray-800">
+      <div className="w-full px-4">
+        <div className="flex items-center justify-between h-14">
           <button 
             onClick={handleHomeClick}
-            className="flex items-center hover:opacity-80"
+            className="flex items-center hover:opacity-90 transition-opacity"
           >
-            <HomeIcon className="h-8 w-8 text-blue-500" />
-            <span className="ml-2 text-xl font-bold text-white">Git Tutorial</span>
+            <HomeIcon className="h-6 w-6 text-blue-500" />
+            <span className="ml-2 text-lg font-semibold text-white">Git Tutorial</span>
           </button>
           
-          <div className="flex space-x-4">
-            <button 
-              onClick={handleLessonsClick}
-              className="flex items-center px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700"
-            >
-              <BookOpenIcon className="h-5 w-5 mr-1" />
-              Lessons
-            </button>
-          </div>
+          <button 
+            onClick={handleLessonsClick}
+            className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors"
+          >
+            <BookOpenIcon className="h-5 w-5" />
+            <span>Lessons</span>
+          </button>
         </div>
       </div>
     </nav>
