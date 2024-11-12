@@ -35,7 +35,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       <div className="flex-grow">
         <div className={clsx('w-full bg-gray-600 rounded-full overflow-hidden border border-gray-500', sizes[size])}>
           <div
-            className={clsx('transition-all duration-300 ease-in-out', colors[color])}
+            className={clsx('transition-all duration-300 ease-in-out h-full', colors[color])}
             style={{ width: `${normalizedProgress}%` }}
           />
         </div>
