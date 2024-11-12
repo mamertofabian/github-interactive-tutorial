@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTutorialContext } from '../../contexts/TutorialContext';
-import { useProgressContext } from '../../contexts/ProgressContext';
+import { useTutorialContext } from '../../contexts/TutorialContext';
 import { Button } from '../ui/Button';
 import { ConceptCard } from '../educational/ConceptCard';
 import { InteractiveTerminal } from '../interactive/InteractiveTerminal';
@@ -16,8 +16,7 @@ interface Section {
 const LessonContainer: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const navigate = useNavigate();
-  const { getLessonById } = useTutorialContext();
-  const { updateProgress } = useProgressContext();
+  const { getLessonById, updateProgress } = useTutorialContext();
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
 
