@@ -65,22 +65,39 @@ export const ProgressProvider: React.FC<ProgressProviderProps> = ({ children, to
       const completedLessons = [...prev.completedLessons];
       if (!completedLessons.includes(lessonId)) {
         completedLessons.push(lessonId);
+        
+        // Save to localStorage
+        localStorage.setItem('completedLessons', JSON.stringify(completedLessons));
+
+        // Show completion message
+        alert('Congratulations! You have completed this lesson.');
       }
 
-      // This is a simplified example - you'd typically determine the next lesson
-      // based on your lesson structure
-      const nextLessonId = 'next-lesson-id';
-      const nextLessonTitle = 'Next Lesson';
+      // Find the next uncompleted lesson
+      const allLessons = ['intro-git', 'basic-commands', 'branching', 'merging', 'remote-repos'];
+      const nextUncompleted = allLessons.find(id => !completedLessons.includes(id));
 
       return {
         ...prev,
         completedLessons,
-        nextLesson: {
-          id: nextLessonId,
-          title: nextLessonTitle
-        }
+        nextLesson: nextUncompleted ? {
+          id: nextUncompleted,
+          title: getLessonTitle(nextUncompleted) // You'll need to implement this helper
+        } : undefined
       };
     });
+  };
+
+  // Helper function to get lesson titles
+  const getLessonTitle = (lessonId: string): string => {
+    const titles: Record<string, string> = {
+      'intro-git': 'Introduction to Git and GitHub',
+      'basic-commands': 'Basic Git Commands',
+      'branching': 'Working with Branches',
+      'merging': 'Merging and Rebasing',
+      'remote-repos': 'Working with Remote Repositories'
+    };
+    return titles[lessonId] || 'Unknown Lesson';
   };
 
   const resetProgress = () => {
