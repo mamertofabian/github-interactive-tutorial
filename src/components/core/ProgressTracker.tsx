@@ -21,12 +21,13 @@ export const ProgressTracker: React.FC = () => {
     setCurrentSection(stepId);
   };
 
-  // Get sections from the context instead of using hardcoded steps
+  const { completedSections } = useTutorialContext();
+  
+  // Get sections from the context with actual completion status
   const tutorialSteps = content.sections.map((section) => ({
     id: section.id,
     name: section.title,
-    // First three sections are marked as completed
-    completed: ['intro', 'setup', 'first-repo'].includes(section.id)
+    completed: completedSections.has(section.id)
   }));
 
   return (

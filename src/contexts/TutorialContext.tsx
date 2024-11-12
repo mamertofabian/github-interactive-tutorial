@@ -128,6 +128,7 @@ interface TutorialContextType {
   setCurrentSection: (sectionId: string | null) => void;
   getSectionById: (id: string) => Section | undefined;
   updateProgress: (sectionId: string) => void;
+  completedSections: Set<string>;
 }
 
 const TutorialContext = createContext<TutorialContextType | undefined>(undefined);
@@ -146,6 +147,11 @@ interface TutorialProviderProps {
 
 export const TutorialProvider: React.FC<TutorialProviderProps> = ({ children }) => {
   const [currentSection, setCurrentSection] = useState<string | null>(null);
+  const [completedSections, setCompletedSections] = useState<Set<string>>(() => {
+    // Load completed sections from localStorage if available
+    const saved = localStorage.getItem('completedSections');
+    return saved ? new Set(JSON.parse(saved)) : new Set<string>();
+  });
   
   // Combine all content
   const combinedContent: TutorialContent = {
@@ -160,8 +166,13 @@ export const TutorialProvider: React.FC<TutorialProviderProps> = ({ children }) 
   };
 
   const updateProgress = (sectionId: string) => {
-    // Implementation for updating progress
-    console.log(`Progress updated for section: ${sectionId}`);
+    setCompletedSections(prev => {
+      const updated = new Set(prev);
+      updated.add(sectionId);
+      // Save to localStorage
+      localStorage.setItem('completedSections', JSON.stringify([...updated]));
+      return updated;
+    });
   };
 
   return (
@@ -172,6 +183,7 @@ export const TutorialProvider: React.FC<TutorialProviderProps> = ({ children }) 
         setCurrentSection,
         getSectionById,
         updateProgress,
+        completedSections,
       }}
     >
       {children}
