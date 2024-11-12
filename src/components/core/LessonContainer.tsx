@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTutorialContext } from '../../contexts/TutorialContext';
-import { useTutorialContext } from '../../contexts/TutorialContext';
 import { Button } from '../ui/Button';
 import { ConceptCard } from '../educational/ConceptCard';
 import { InteractiveTerminal } from '../interactive/InteractiveTerminal';
@@ -45,6 +44,8 @@ const LessonContainer: React.FC = () => {
 
   const handleNext = () => {
     if (isComplete) {
+      // Show completion message before navigating
+      alert('Congratulations! You have completed this lesson.');
       navigate('/lessons');
     } else {
       handleSectionComplete();
