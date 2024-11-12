@@ -1,23 +1,74 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import tutorialContent from '../data/tutorial-content.json';
 
-interface Lesson {
-  id: string;
+// Make visualization type more flexible
+interface BaseVisualization {
+  type: string;
+}
+
+interface DataVisualization extends BaseVisualization {
+  data: any;
+}
+
+interface StepsVisualization extends BaseVisualization {
+  steps: string[];
+}
+
+type Visualization = DataVisualization | StepsVisualization;
+
+interface Concept {
   title: string;
   description: string;
-  duration: string;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  sections: Array<{
-    type: 'theory' | 'practice' | 'challenge';
-    content: any;
-  }>;
+  visualization?: Visualization;
+}
+
+interface KeyTerm {
+  term: string;
+  definition: string;
+}
+
+interface InstallStep {
+  os: string;
+  steps: string[];
+}
+
+interface Step {
+  title: string;
+  instructions?: InstallStep[];
+  steps?: string[];
+  visualization?: Visualization;
+}
+
+interface Section {
+  id: string;
+  title: string;
+  content: {
+    overview: string;
+    concepts?: Concept[];
+    keyTerms?: KeyTerm[];
+    steps?: Step[];
+    practice?: {
+      title: string;
+      steps: Array<{
+        action: string;
+        command: string;
+        explanation: string;
+      }>;
+    };
+  };
+}
+
+interface TutorialContent {
+  title: string;
+  sections: Section[];
 }
 
 interface TutorialContextType {
-  lessons: Lesson[];
-  currentLesson: string | null;
-  setCurrentLesson: (lessonId: string | null) => void;
-  getLessonById: (id: string) => Lesson | undefined;
-  updateProgress: (lessonId: string) => void;
+  content: TutorialContent;
+  currentSection: string | null;
+  setCurrentSection: (sectionId: string | null) => void;
+  getSectionById: (id: string) => Section | undefined;
+  updateProgress: (sectionId: string) => void;
 }
 
 const TutorialContext = createContext<TutorialContextType | undefined>(undefined);
@@ -35,69 +86,25 @@ interface TutorialProviderProps {
 }
 
 export const TutorialProvider: React.FC<TutorialProviderProps> = ({ children }) => {
-  const [currentLesson, setCurrentLesson] = useState<string | null>(null);
-  
-  // Initial lessons data structure
-  const [lessons] = useState<Lesson[]>([
-    {
-      id: 'intro-git',
-      title: 'Introduction to Git and GitHub',
-      description: 'Learn the basics of version control and GitHub\'s platform',
-      duration: '30 mins',
-      difficulty: 'Beginner',
-      sections: [
-        {
-          type: 'theory',
-          content: {
-            title: 'What is Git?',
-            description: 'Git is a distributed version control system...',
-            // Additional content...
-          }
-        },
-        // Additional sections...
-      ]
-    },
-    {
-      id: 'setup-environment',
-      title: 'Setting Up Your Environment',
-      description: 'Configure Git and create your GitHub account',
-      duration: '20 mins',
-      difficulty: 'Beginner',
-      sections: [
-        {
-          type: 'practice',
-          content: {
-            title: 'Installing Git',
-            steps: [
-              'Download Git from git-scm.com',
-              'Run the installer',
-              'Verify installation with git --version'
-            ]
-          }
-        },
-        // Additional sections...
-      ]
-    },
-    // Additional lessons...
-  ]);
+  const [currentSection, setCurrentSection] = useState<string | null>(null);
+  const [content] = useState<TutorialContent>(tutorialContent);
 
-  const getLessonById = (id: string) => {
-    return lessons.find(lesson => lesson.id === id);
+  const getSectionById = (id: string) => {
+    return content.sections.find(section => section.id === id);
   };
 
-  const updateProgress = (lessonId: string) => {
+  const updateProgress = (sectionId: string) => {
     // Implementation for updating progress
-    // This would typically interact with some form of storage
-    console.log(`Progress updated for lesson: ${lessonId}`);
+    console.log(`Progress updated for section: ${sectionId}`);
   };
 
   return (
     <TutorialContext.Provider
       value={{
-        lessons,
-        currentLesson,
-        setCurrentLesson,
-        getLessonById,
+        content,
+        currentSection,
+        setCurrentSection,
+        getSectionById,
         updateProgress,
       }}
     >

@@ -1,144 +1,120 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '../ui/Button';
+import React from 'react';
 
-interface Step {
-  id: string;
-  description: string;
-  content: React.ReactNode;
+interface Visualization {
+  type: string;
+  data?: any;
+  steps?: string[];
+  items?: Array<{
+    title: string;
+    points: string[];
+  }>;
 }
 
 interface VisualizationContainerProps {
-  type: 'timeline' | 'diagram' | 'animation';
-  title: string;
-  description: string;
-  steps: Step[];
+  visualization: Visualization;
 }
 
 export const VisualizationContainer: React.FC<VisualizationContainerProps> = ({
-  type,
-  title,
-  description,
-  steps = []
+  visualization
 }) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const handleNext = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(prev => prev + 1);
-    } else {
-      setIsPlaying(false);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentStep > 0) {
-      setCurrentStep(prev => prev - 1);
-    }
-  };
-
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-    if (!isPlaying && currentStep === steps.length - 1) {
-      setCurrentStep(0);
-    }
-  };
-
-  useEffect(() => {
-    let timer: number | undefined;
-    if (isPlaying) {
-      timer = window.setTimeout(() => {
-        if (currentStep < steps.length - 1) {
-          setCurrentStep(prev => prev + 1);
-        } else {
-          setIsPlaying(false);
-        }
-      }, 2000); // Adjust timing as needed
-    }
-    return () => {
-      if (timer) window.clearTimeout(timer);
-    };
-  }, [isPlaying, currentStep, steps.length]);
-
-  // Early return if no steps
-  if (!steps || steps.length === 0) {
+  const renderTimeline = (data: any) => {
     return (
-      <div className="bg-gray-800 rounded-lg overflow-hidden">
-        <div className="p-6">
-          <h3 className="text-xl font-bold mb-2 text-white">{title}</h3>
-          <p className="text-gray-300 mb-6">{description}</p>
-          <div className="bg-gray-900 rounded-lg p-6 mb-6 min-h-[300px] flex items-center justify-center">
-            <p className="text-gray-300">No visualization steps available.</p>
+      <div className="space-y-4">
+        {data.points.map((point: any, index: number) => (
+          <div key={index} className="flex items-start space-x-4">
+            <div className="flex-shrink-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
+              {index + 1}
+            </div>
+            <div>
+              <h4 className="text-white font-medium">{point.label}</h4>
+              <p className="text-gray-300">{point.description}</p>
+            </div>
           </div>
+        ))}
+      </div>
+    );
+  };
+
+  const renderDiagram = (data: any) => {
+    return (
+      <div className="relative p-8">
+        <div className="bg-blue-500 text-white p-4 rounded-lg text-center mb-8">
+          {data.center}
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          {data.connections.map((connection: any, index: number) => (
+            <div key={index} className="bg-gray-700 p-4 rounded-lg text-center">
+              <p className="text-white font-medium">{connection.label}</p>
+              <p className="text-gray-300 text-sm">{connection.action}</p>
+            </div>
+          ))}
         </div>
       </div>
     );
-  }
+  };
 
-  const currentStepData = steps[currentStep];
+  const renderComparison = (items: any) => {
+    return (
+      <div className="grid grid-cols-2 gap-4">
+        {items.map((item: any, index: number) => (
+          <div key={index} className="bg-gray-700 p-4 rounded-lg">
+            <h4 className="text-white font-medium mb-2">{item.title}</h4>
+            <ul className="space-y-2">
+              {item.points.map((point: string, pointIndex: number) => (
+                <li key={pointIndex} className="text-gray-300 flex items-start">
+                  <span className="text-blue-400 mr-2">•</span>
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const renderSteps = (steps: string[]) => {
+    return (
+      <div className="space-y-2">
+        {steps.map((step, index) => (
+          <div key={index} className="flex items-start space-x-2">
+            <span className="text-blue-400 font-medium">{index + 1}.</span>
+            <span className="text-gray-300">{step}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const renderContent = () => {
+    switch (visualization.type) {
+      case 'timeline':
+        return renderTimeline(visualization.data);
+      case 'diagram':
+        return renderDiagram(visualization.data);
+      case 'comparison':
+        return renderComparison(visualization.items || []);
+      case 'screenshot':
+        return (
+          <div className="text-center">
+            <p className="text-gray-300">Screenshot visualization placeholder</p>
+          </div>
+        );
+      default:
+        if (visualization.steps) {
+          return renderSteps(visualization.steps);
+        }
+        return (
+          <div className="text-center">
+            <p className="text-gray-300">Unsupported visualization type: {visualization.type}</p>
+          </div>
+        );
+    }
+  };
 
   return (
-    <div className="bg-gray-800 rounded-lg overflow-hidden">
-      <div className="p-6">
-        <h3 className="text-xl font-bold mb-2 text-white">{title}</h3>
-        <p className="text-gray-300 mb-6">{description}</p>
-
-        {/* Visualization Area */}
-        <div className="bg-gray-900 rounded-lg p-6 mb-6 min-h-[300px] flex items-center justify-center">
-          {currentStepData?.content || <p className="text-gray-300">No content available for this step.</p>}
-        </div>
-
-        {/* Controls */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-x-2">
-              <Button
-                onClick={handlePrevious}
-                disabled={currentStep === 0}
-                variant="secondary"
-                size="sm"
-              >
-                Previous
-              </Button>
-              <Button
-                onClick={handlePlayPause}
-                variant="primary"
-                size="sm"
-              >
-                {isPlaying ? 'Pause' : 'Play'}
-              </Button>
-              <Button
-                onClick={handleNext}
-                disabled={currentStep === steps.length - 1}
-                variant="secondary"
-                size="sm"
-              >
-                Next
-              </Button>
-            </div>
-            <span className="text-gray-400 text-sm">
-              Step {currentStep + 1} of {steps.length}
-            </span>
-          </div>
-
-          {/* Step Description */}
-          <div className="bg-gray-700 p-4 rounded-lg">
-            <p className="text-gray-300">
-              {currentStepData?.description || 'No description available for this step.'}
-            </p>
-          </div>
-
-          {/* Progress Bar */}
-          <div className="h-1 bg-gray-700 rounded-full">
-            <div
-              className="h-full bg-blue-600 rounded-full transition-all duration-300"
-              style={{
-                width: `${((currentStep + 1) / steps.length) * 100}%`
-              }}
-            />
-          </div>
-        </div>
-      </div>
+    <div className="bg-gray-800 rounded-lg p-6">
+      {renderContent()}
     </div>
   );
 };

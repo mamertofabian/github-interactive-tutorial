@@ -1,27 +1,42 @@
 import React from 'react';
+import { VisualizationContainer } from '../interactive/VisualizationContainer';
+
+interface Visualization {
+  type: string;
+  data?: any;
+  steps?: string[];
+  items?: Array<{
+    title: string;
+    points: string[];
+  }>;
+}
 
 interface ConceptCardProps {
   title: string;
   description: string;
   examples?: string[];
   keyPoints?: string[];
-  visualization?: {
-    type: string;
-    data: any;
-  };
+  visualization?: Visualization;
 }
 
 export const ConceptCard: React.FC<ConceptCardProps> = ({
   title,
   description,
   examples = [],
-  keyPoints = []
+  keyPoints = [],
+  visualization
 }) => {
   return (
     <div className="bg-gray-800 rounded-lg overflow-hidden">
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-4 text-white">{title}</h2>
         <p className="text-gray-300 mb-6">{description}</p>
+
+        {visualization && (
+          <div className="mb-6">
+            <VisualizationContainer visualization={visualization} />
+          </div>
+        )}
 
         {keyPoints.length > 0 && (
           <div className="mb-6">
